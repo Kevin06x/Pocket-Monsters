@@ -1,5 +1,5 @@
-import pygame
-from pygame.math import Vector2 as vector
+import pygame # type: ignore
+from pygame.math import Vector2 as vector # type: ignore
 from sys import exit
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720

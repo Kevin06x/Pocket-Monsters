@@ -1,5 +1,5 @@
 from settings import *
-from pytmx.util_pygame import load_pygame
+from pytmx.util_pygame import load_pygame # type: ignore
 from os.path import join
 
 from sprites import Sprite
