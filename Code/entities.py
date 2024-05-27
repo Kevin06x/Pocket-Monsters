@@ -53,7 +53,7 @@ class Player(Entity):
         if keys[pygame.K_RIGHT]:
             input_vector.x += 1
 
-        self.direction = input_vector
+        self.direction = input_vector.normalize() if input_vector else input_vector
 
     def move(self, dt):
         self.rect.centerx += self.direction.x * self.speed * dt
