@@ -7,6 +7,7 @@ class Entity(pygame.sprite.Sprite):
 
         self.direction = vector()
         self.speed = 250
+        self.blocked = False
 
         #Graphics
         self.frame_index, self.frames = 0, frames
@@ -31,6 +32,13 @@ class Entity(pygame.sprite.Sprite):
                 self.facing_direction = 'down' if self.direction.y > 0 else 'up'
             
         return f'{self.facing_direction}{'' if moving else '_idle'}'
+    
+    def block(self):
+        self.blocked = True
+        self.direction = vector(0,0)
+    
+    def unblock(self):
+        self.blocked = False
     
 class Character(Entity):
     def __init__(self, pos, frames, groups, facing_direction):
@@ -82,6 +90,7 @@ class Player(Entity):
 
     def update(self, dt):
         self.y_sort = self.rect.centery
-        self.input()
-        self.move(dt)
-        self.animate(dt)
+        if not self.blocked:
+            self.input()
+            self.move(dt)
+            self.animate(dt)
