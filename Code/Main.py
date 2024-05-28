@@ -9,6 +9,8 @@ from groups import AllSprites
 from support import *
 from game_data import *
 from dialog import *
+from monster import Monster
+from monster_index import MonsterIndex
 
 class Game:
     def __init__(self):
@@ -16,6 +18,16 @@ class Game:
         self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption('Pocket Monsters')
         self.clock = pygame.time.Clock()
+
+        #Monsters
+        self.player_monsters = {
+            0: Monster('Charmadillo', 30),
+            1: Monster('Friolera', 2),
+            2: Monster('Atrox', 30),
+            3: Monster('Pouch', 12),
+            4: Monster('Jacana', 18),
+            5: Monster('Sparchu', 24)
+        }
 
         #Groups
         self.all_sprites = AllSprites()
@@ -35,6 +47,9 @@ class Game:
 
         self.dialog_tree = None
 
+        #Overlays
+        self.monster_index = MonsterIndex(self.player_monsters, self.fonts)
+
     def import_assets(self):
         self.tmx_maps = tmx_importer('..', 'data', 'maps')
         
@@ -45,7 +60,10 @@ class Game:
         }
 
         self.fonts = {
-            'dialog': pygame.font.Font(join('..', 'graphics', 'fonts', 'PixeloidSans.ttf'), 30)
+            'dialog': pygame.font.Font(join('..', 'graphics', 'fonts', 'PixeloidSans.ttf'), 30),
+            'regular': pygame.font.Font(join('..', 'graphics', 'fonts', 'PixeloidSans.ttf'), 18),
+            'small': pygame.font.Font(join('..', 'graphics', 'fonts', 'PixeloidSans.ttf'), 14),
+            'bold': pygame.font.Font(join('..', 'graphics', 'fonts', 'dogicapixelbold.otf'), 20)
         }
 
     def setup(self, tmx_map, player_start_pos):
