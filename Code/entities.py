@@ -33,6 +33,13 @@ class Entity(pygame.sprite.Sprite):
             
         return f'{self.facing_direction}{'' if moving else '_idle'}'
     
+    def change_facing_direction(self, target_pos):
+        relation = vector(target_pos) - vector(self.rect.center)
+        if abs(relation.y) < 30:
+            self.facing_direction = 'right' if relation.x > 0 else 'left'
+        else:
+            self.facing_direction = 'down' if relation.y > 0 else 'up'
+
     def block(self):
         self.blocked = True
         self.direction = vector(0,0)
@@ -41,8 +48,11 @@ class Entity(pygame.sprite.Sprite):
         self.blocked = False
     
 class Character(Entity):
-    def __init__(self, pos, frames, groups, facing_direction):
+    def __init__(self, pos, frames, groups, facing_direction, character_data):
         super().__init__(pos , frames, groups, facing_direction)
+
+    def update(self, dt):
+        self.animate(dt)
 
 class Player(Entity):
     def __init__(self, pos, frames, groups, facing_direction, collision_sprites):
@@ -93,4 +103,4 @@ class Player(Entity):
         if not self.blocked:
             self.input()
             self.move(dt)
-            self.animate(dt)
+        self.animate(dt)
