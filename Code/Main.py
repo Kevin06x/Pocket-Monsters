@@ -21,12 +21,14 @@ class Game:
 
         #Monsters
         self.player_monsters = {
-            0: Monster('Charmadillo', 30),
-            1: Monster('Friolera', 2),
-            2: Monster('Atrox', 30),
-            3: Monster('Pouch', 12),
-            4: Monster('Jacana', 18),
-            5: Monster('Sparchu', 24)
+            0: Monster('Charmadillo', 45),
+            1: Monster('Finiette', 45),
+            2: Monster('Pluma', 45),
+            3: Monster('Friolera', 2),
+            4: Monster('Atrox', 30),
+            5: Monster('Pouch', 12),
+            6: Monster('Jacana', 18),
+            7: Monster('Sparchu', 24)
         }
 
         #Groups
@@ -48,7 +50,8 @@ class Game:
         self.dialog_tree = None
 
         #Overlays
-        self.monster_index = MonsterIndex(self.player_monsters, self.fonts)
+        self.monster_index = MonsterIndex(self.player_monsters, self.fonts, self.monster_frames)
+        self.index_open = False
 
     def import_assets(self):
         self.tmx_maps = tmx_importer('..', 'data', 'maps')
@@ -57,6 +60,10 @@ class Game:
             'water' : import_folder('..', 'graphics', 'tilesets', 'water'),
             'coast': coast_importer(24, 12, '..', 'graphics', 'tilesets', 'coast'),
             'characters': all_character_import('..', 'graphics', 'characters')
+        }
+
+        self.monster_frames = {
+            'icons': import_folder_dict('..', 'graphics', 'icons')
         }
 
         self.fonts = {
@@ -140,6 +147,10 @@ class Game:
                         character.change_facing_direction(self.player.rect.center)
                         self.create_dialog(character)
                         character.can_rotate = False
+                    
+            if keys[pygame.K_RETURN]:
+                self.index_open = not self.index_open
+                self.player.blocked = not self.player.blocked
     
     def create_dialog(self, character):
         if not self.dialog_tree:
@@ -192,6 +203,9 @@ class Game:
             #Overlays
             if self.dialog_tree:
                 self.dialog_tree.update()
+            
+            if self.index_open:
+                self.monster_index.update(dt)
 
             self.tint_screen(dt)
             pygame.display.update()
